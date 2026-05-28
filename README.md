@@ -43,7 +43,6 @@ Execute the simulation:
 Visualize Telemetry:
 Run the included Python script to plot Altitude, Velocity, and Acceleration graphs.
 
-```bash
 python scripts/plot.py
 🎯 Purpose
 This project was developed to explore aerospace dynamics and embedded software engineering patterns, specifically targeting the architectural demands of defense and aerospace systems (e.g., TÜBİTAK).
