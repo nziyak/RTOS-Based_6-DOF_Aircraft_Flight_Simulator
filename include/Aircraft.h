@@ -7,6 +7,8 @@
 #include <atomic>
 #include <fstream>
 
+using namespace std;
+
 //state machine of the aircraft
 enum class FlightState 
 {
@@ -23,7 +25,7 @@ class Aircraft
         //physical state(shared data)
         //these data will be written by physics thread and read by telemetry
         //so we protect them with mutex
-        std::mutex stateMutex; 
+        mutex stateMutex; 
         Vector3 position;
         Vector3 velocity;
         Quaternion orientation;
@@ -36,13 +38,13 @@ class Aircraft
         float dragCoefficient = 0.05f;
 
         //rtos control variables
-        std::atomic<FlightState> currentState;
-        std::atomic<bool> isRunning; //to shutdown all system
+        atomic<FlightState> currentState;
+        atomic<bool> isRunning; //to shutdown all system
 
         //threads
-        std::thread physicsThread;
-        std::thread controlThread;
-        std::thread telemetryThread;
+        thread physicsThread;
+        thread controlThread;
+        thread telemetryThread;
 
         //thread functions
         void PhysicsLoop();    // 1000Hz loop

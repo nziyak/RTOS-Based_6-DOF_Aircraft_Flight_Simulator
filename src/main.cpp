@@ -3,16 +3,15 @@
 
 #include "../include/Vector3.h"
 #include "../include/Quaternion.h"
-#include "../include/Rocket.h"
+#include "../include/Aircraft.h"
 
 using namespace std;
 
 int main()
 {
-    Rocket rocket;
-    rocket.position = Vector3(0,0,0);
+    Aircraft aircraft;
+    //aircraft.position = Vector3(0,0,0);
     
-
     float dt = 0.01f;
     float flight_time = 0.0f; //to measure the total flight time
     bool running = true;
@@ -20,6 +19,7 @@ int main()
     ofstream log("data/flight_data.csv");
     log << "time,altitude,velocity,acceleration\n";
 
+    /*
     while(running)
     {
         flight_time += dt;
@@ -38,6 +38,7 @@ int main()
             break;
         }
     }
+    */
     
     return 0;
 }
