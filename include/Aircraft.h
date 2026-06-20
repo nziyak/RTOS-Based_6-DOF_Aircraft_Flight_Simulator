@@ -6,6 +6,7 @@
 #include <mutex>
 #include <atomic>
 #include <fstream>
+#include <chrono>
 
 using namespace std;
 
@@ -63,4 +64,9 @@ class Aircraft
 
         //thread-safe getter to read data
         Vector3 GetPosition();
+        float GetMass();
+        float GetWingArea();
+        float GetLiftCoef();
+        float GetDragCoef();
+        float GetCurrentThrust();
 };

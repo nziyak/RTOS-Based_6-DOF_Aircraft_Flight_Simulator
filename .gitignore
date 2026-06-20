@@ -1,0 +1,22 @@
+# Build and Executable Files
+flight_sim
+*.o
+*.out
+*.exe
+*.obj
+
+# Python Virtual Environments
+rtos-air/
+venv/
+env/
+.venv/
+__pycache__/
+
+# Data and Logs
+data/flight_data.csv
+*.csv
+*.log
+
+# OS Specific
+.DS_Store
+Thumbs.db
