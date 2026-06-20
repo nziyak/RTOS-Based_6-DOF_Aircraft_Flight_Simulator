@@ -19,6 +19,9 @@ void Aircraft::BootSystem()
     isRunning = true;
     currentState = FlightState::IDLE;
 
+    logFile.open("data/flight_data.csv");
+    logFile << "time,altitude,velocity,acceleration\n";
+
     //start the 3 threads
     physicsThread = thread(&Aircraft::PhysicsLoop, this);
     controlThread = thread(&Aircraft::ControlLoop, this);
@@ -32,6 +35,8 @@ void Aircraft::Shutdown()
     if(physicsThread.joinable()) physicsThread.join();
     if(controlThread.joinable()) controlThread.join();
     if(telemetryThread.joinable()) telemetryThread.join();
+
+    logFile.close();
 }
 
 Vector3 Aircraft::GetPosition()
@@ -151,8 +156,19 @@ void Aircraft::ControlLoop()
 
         {
             lock_guard<mutex> lock(stateMutex);
+
+            if((isnan(velocity.x) || isnan(velocity.y) || isnan(velocity.z))
+                ||
+                velocity.Length() > 5000.0f)
+            {
+                currentState = FlightState::FAIL_SAFE;
+            }
+
             switch(currentState)
             {
+                case FlightState::INIT_BOOT:
+                    break;
+                
                 case FlightState::IDLE:
                     
                     currentThrust = 0;
@@ -186,6 +202,11 @@ void Aircraft::ControlLoop()
                     currentThrust = 30000.0f;
 
                     break;
+                
+                case FlightState::FAIL_SAFE:
+                    currentThrust = 0; //bu kısım daha akıllı olmalı. hata tipine bağlı olarak başta başladığı yere dönme olabilir
+                        //bunun için uçağın başlangıç konumunu tutmalıyız ve hareket ettikçe güncellemeliyiz konumunu, fail safe olunca da geri dönebilir.
+                    break;
             }
         }
         
@@ -210,7 +231,14 @@ void Aircraft::TelemetryLoop()
 
         this_thread::sleep_for(milliseconds(50)); //for now assume telemetry job takes 50 milliseconds
         
-        cout << "telemetry loop " << i << " is working..." << endl;
+        {
+            lock_guard<mutex> lock(stateMutex);
+
+            logFile << (i * 0.1f) << "," 
+                    << position.y << "," 
+                    << velocity.y << "," 
+                    << currentThrust << "\n";
+        }
 
         this_thread::sleep_until(target_time);
 

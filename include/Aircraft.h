@@ -7,6 +7,7 @@
 #include <atomic>
 #include <fstream>
 #include <chrono>
+#include <cmath>
 
 using namespace std;
 
@@ -23,6 +24,9 @@ enum class FlightState
 class Aircraft 
 {
     private:
+        
+        ofstream logFile; //to write the telemetry
+
         //physical state(shared data)
         //these data will be written by physics thread and read by telemetry
         //so we protect them with mutex

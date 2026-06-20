@@ -17,10 +17,7 @@ int main()
     
     float dt = 0.01f;
     float flight_time = 0.0f; //to measure the total flight time
-
-    ofstream log("data/flight_data.csv");
-    log << "time,altitude,velocity,acceleration\n";
-
+    
     this_thread::sleep_for(seconds(10));
 
     aircraft.Shutdown();

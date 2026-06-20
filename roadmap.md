@@ -23,15 +23,25 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] Thrust (İtme) ve Gravity (Yerçekimi) kuvvetlerinin uçağın yönelimine (Quaternion) göre vektörel olarak sisteme uygulanması.
 - [x] Tüm bu fiziksel durum güncellemelerinin `stateMutex` kullanılarak thread-safe (güvenli) bir şekilde Shared Memory'ye (Paylaşımlı belleğe) yazılması.
 
-## Aşama 5: Uçuş Kontrol ve Durum Yönetimi (ŞU AN BURADAYIZ) 📍
+## Aşama 5: Uçuş Kontrol ve Durum Yönetimi
 - [x] Uçuş durumları arası geçiş mantığının (IDLE -> TAKEOFF -> CRUISE) belirli şartlara (örneğin hıza, irtifaya) göre otomatikleştirilmesi.
 - [x] Gaz kolu (Throttle) ve kontrol yüzeylerinin (Aileron, Elevator) durumlarına göre istenilen itme ve yönelim değerlerinin hesaplanması.
-- [ ] İstenmeyen fiziksel durumlara (örneğin NaN değerli hızlar veya aşırı G kuvveti) karşı `FAIL_SAFE` durumuna geçişi tetikleyecek güvenlik kontrollerinin yazılması.
+- [x] İstenmeyen fiziksel durumlara (örneğin NaN değerli hızlar veya aşırı G kuvveti) karşı `FAIL_SAFE` durumuna geçişi tetikleyecek güvenlik kontrollerinin yazılması.
 
-## Aşama 6: Telemetri ve Loglama (Düşük Öncelikli - 10Hz)
-- [ ] `stateMutex` kilitlenerek güncel pozisyon, hız, yönelim ve FlightState verilerinin güvenli bir şekilde okunması.
-- [ ] Okunan bu verilerin, zaman damgasıyla birlikte sonradan analiz edilebilmesi için `.csv` formatında bir dosyaya yazdırılması.
+## Aşama 6: Telemetri ve Loglama
+- [x] `stateMutex` kilitlenerek güncel pozisyon, hız, yönelim ve FlightState verilerinin güvenli bir şekilde okunması.
+- [x] Okunan bu verilerin, zaman damgasıyla birlikte sonradan analiz edilebilmesi için `.csv` formatında bir dosyaya yazdırılması.
 
-## Aşama 7: Test, Doğrulama ve Analiz
-- [ ] Sistemin INIT'ten CRUISE aşamasına kadar kesintisiz uçurulması (Bir senaryo çalıştırılması).
-- [ ] Oluşturulan `.csv` dosyasındaki verilerin (İrtifa - Zaman, Hız - Zaman grafikleri gibi) doğruluğunun ve fizik kurallarına uygunluğunun harici bir araçla (Python/Matplotlib veya Excel) çizdirilerek doğrulanması.
+## Aşama 7: Test, Doğrulama ve Analiz (TAMAMLANDI) 🏁
+- [x] Sistemin INIT'ten CRUISE aşamasına kadar kesintisiz uçurulması (Bir senaryo çalıştırılması).
+- [x] Oluşturulan `.csv` dosyasındaki verilerin (İrtifa - Zaman, Hız - Zaman grafikleri gibi) doğruluğunun ve fizik kurallarına uygunluğunun harici bir araçla (Python/Matplotlib veya Excel) çizdirilerek doğrulanması.
+
+## Aşama 8: Rotasyonel Dinamikler (3D Hareket) (ŞU AN BURADAYIZ) 📍
+- [ ] `Aircraft.h` içerisine Açısal Hız (Angular Velocity), Açısal İvme (Angular Acceleration) ve Atalet Momenti (Inertia) değişkenlerinin eklenmesi.
+- [ ] Kontrol yüzeylerinin (Aileron, Elevator, Rudder) açılarının tanımlanması ve bunların uçak üzerinde oluşturduğu Tork'un (Döndürme Kuvveti) hesaplanması.
+- [ ] Hesaplanan tork ile açısal ivme ve açısal hızın Euler ile entegre edilmesi.
+- [ ] Açısal hız kullanılarak uçağın güncel yönelim (Quaternion) değerinin döndürülerek güncellenmesi.
+
+## Aşama 9: Unity ile Canlı (Real-Time) UDP Haberleşmesi
+- [ ] C++ `TelemetryLoop` içerisine bir UDP Soket entegre edilerek uçağın pozisyon ve quaternion verilerinin saniyede 10 veya daha fazla kere yayınlanması (Broadcasting).
+- [ ] Unity tarafında bir C# script yazılarak bu UDP portunun dinlenmesi ve gelen 6-DOF verilerin 3D uçak modeline anlık olarak uygulanması.
