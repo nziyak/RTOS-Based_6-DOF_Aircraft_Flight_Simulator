@@ -17,13 +17,13 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] `main.cpp` içerisindeki uçak objesinin `BootSystem` ile ayağa kaldırılması ve ana thread'in belirli bir süre çalışıp `Shutdown` edebilmesi için bir yaşam döngüsünün kurulması.
 - [x] Thread döngülerinin (`PhysicsLoop`, `ControlLoop`, `TelemetryLoop`) mimaride belirtilen frekanslarda (sırasıyla 1000Hz, 100Hz, 10Hz) çalışmasını sağlayacak "hassas bekleme (precise timing/sleeping)" mekanizmasının kurulması.
 
-## Aşama 4: Fizik Motorunun Geliştirilmesi (ŞU AN BURADAYIZ) 📍
+## Aşama 4: Fizik Motorunun Geliştirilmesi
 - [x] Euler integrasyonu kullanılarak ivmeden hız, hızdan konum hesaplamalarının kodlanması.
 - [x] Aerodinamik kuvvetlerin hesaplanması: Lift (Kaldırma kuvveti) ve Drag (Sürüklenme kuvveti).
-- [ ] Thrust (İtme) ve Gravity (Yerçekimi) kuvvetlerinin uçağın yönelimine (Quaternion) göre vektörel olarak sisteme uygulanması.
+- [x] Thrust (İtme) ve Gravity (Yerçekimi) kuvvetlerinin uçağın yönelimine (Quaternion) göre vektörel olarak sisteme uygulanması.
 - [x] Tüm bu fiziksel durum güncellemelerinin `stateMutex` kullanılarak thread-safe (güvenli) bir şekilde Shared Memory'ye (Paylaşımlı belleğe) yazılması.
 
-## Aşama 5: Uçuş Kontrol ve Durum Yönetimi (Orta Öncelikli - 100Hz)
+## Aşama 5: Uçuş Kontrol ve Durum Yönetimi (ŞU AN BURADAYIZ) 📍
 - [ ] Uçuş durumları arası geçiş mantığının (IDLE -> TAKEOFF -> CRUISE) belirli şartlara (örneğin hıza, irtifaya) göre otomatikleştirilmesi.
 - [ ] Gaz kolu (Throttle) ve kontrol yüzeylerinin (Aileron, Elevator) durumlarına göre istenilen itme ve yönelim değerlerinin hesaplanması.
 - [ ] İstenmeyen fiziksel durumlara (örneğin NaN değerli hızlar veya aşırı G kuvveti) karşı `FAIL_SAFE` durumuna geçişi tetikleyecek güvenlik kontrollerinin yazılması.

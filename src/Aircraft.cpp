@@ -87,11 +87,15 @@ void Aircraft::PhysicsLoop()
     float liftForceMag;
     Vector3 liftForce;
     Vector3 posNormalized;
-    Vector3 liftDir(0.0f, 1.0f, 0.0f); //for now assume that aircraft does not lean to right and left
+    Vector3 liftDir; //for now assume that aircraft does not lean to right and left
 
     float dragForceMag;
     Vector3 dragForce; 
     Vector3 dragDir;
+
+    float thrustMag;
+    Vector3 thrustForce;
+    Vector3 thrustDir;
 
     Vector3 totalForce;
 
@@ -105,16 +109,19 @@ void Aircraft::PhysicsLoop()
         gravityForce = gravityVector * mass; //calculate the gravitational force
 
         liftForceMag = 0.5f * RHO * velocity.LengthSquared() * wingArea * liftCoefficient; //v^2'den emin olamadım vektörün karesini mi almam lazımdı böyle?
-        //posNormalized = position.Normalize(); 
-        //liftForce.y = posNormalized.y;
-        liftForce = /*liftForce*/ liftDir * liftForceMag;
+        liftDir = orientation.RotateVector(Vector3(0,1,0));
+        liftForce = liftDir * liftForceMag;
 
         dragForceMag = 0.5f * RHO * velocity.LengthSquared() * wingArea * dragCoefficient;
         
         dragDir = (velocity * -1.0f).Normalized();
         dragForce = dragDir * dragForceMag;
 
-        totalForce = gravityForce + liftForce + dragForce;
+        thrustMag = GetCurrentThrust();
+        thrustDir = orientation.RotateVector(Vector3(0,0,1)); //lets assume that aircraft looks at (0,0,1) locally. now we find the thrust direction in real world by multiplying it with its orientation 
+        thrustForce = thrustDir * thrustMag;
+
+        totalForce = gravityForce + liftForce + dragForce + thrustForce;
 
         acc = totalForce / mass; //find the acceleration
 
