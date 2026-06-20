@@ -145,11 +145,50 @@ void Aircraft::ControlLoop()
     auto target_time = steady_clock::now();
 
     int i = 0;
-
     while(isRunning)
     {
         target_time += period;
 
+        {
+            lock_guard<mutex> lock(stateMutex);
+            switch(currentState)
+            {
+                case FlightState::IDLE:
+                    
+                    currentThrust = 0;
+                    //for now as we dont have an external command from pilot
+                    //we change the state here to takeofff automatically, for test purposes
+                    currentState = FlightState::TAKEOFF;
+                
+                    break;
+
+                case FlightState::TAKEOFF:
+
+                    if (currentThrust < 50000.0f) 
+                    {
+                        currentThrust += 250.0f; 
+                    }
+
+                    if (currentThrust < 100000.0f) 
+                    {
+                        currentThrust += 500.0f; 
+                    }
+                    
+                    if(velocity.Length() > 100.0f)
+                    {
+                        currentState = FlightState::CRUISE;
+                    }
+
+                    break;
+
+                case FlightState::CRUISE:
+
+                    currentThrust = 30000.0f;
+
+                    break;
+            }
+        }
+        
         this_thread::sleep_for(milliseconds(5)); //for now assume control job takes 5 milliseconds
 
         this_thread::sleep_until(target_time);

@@ -24,8 +24,8 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] Tüm bu fiziksel durum güncellemelerinin `stateMutex` kullanılarak thread-safe (güvenli) bir şekilde Shared Memory'ye (Paylaşımlı belleğe) yazılması.
 
 ## Aşama 5: Uçuş Kontrol ve Durum Yönetimi (ŞU AN BURADAYIZ) 📍
-- [ ] Uçuş durumları arası geçiş mantığının (IDLE -> TAKEOFF -> CRUISE) belirli şartlara (örneğin hıza, irtifaya) göre otomatikleştirilmesi.
-- [ ] Gaz kolu (Throttle) ve kontrol yüzeylerinin (Aileron, Elevator) durumlarına göre istenilen itme ve yönelim değerlerinin hesaplanması.
+- [x] Uçuş durumları arası geçiş mantığının (IDLE -> TAKEOFF -> CRUISE) belirli şartlara (örneğin hıza, irtifaya) göre otomatikleştirilmesi.
+- [x] Gaz kolu (Throttle) ve kontrol yüzeylerinin (Aileron, Elevator) durumlarına göre istenilen itme ve yönelim değerlerinin hesaplanması.
 - [ ] İstenmeyen fiziksel durumlara (örneğin NaN değerli hızlar veya aşırı G kuvveti) karşı `FAIL_SAFE` durumuna geçişi tetikleyecek güvenlik kontrollerinin yazılması.
 
 ## Aşama 6: Telemetri ve Loglama (Düşük Öncelikli - 10Hz)
