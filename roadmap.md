@@ -37,11 +37,12 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] Oluşturulan `.csv` dosyasındaki verilerin (İrtifa - Zaman, Hız - Zaman grafikleri gibi) doğruluğunun ve fizik kurallarına uygunluğunun harici bir araçla (Python/Matplotlib veya Excel) çizdirilerek doğrulanması.
 
 ## Aşama 8: Rotasyonel Dinamikler (3D Hareket) (ŞU AN BURADAYIZ) 📍
-- [ ] `Aircraft.h` içerisine Açısal Hız (Angular Velocity), Açısal İvme (Angular Acceleration) ve Atalet Momenti (Inertia) değişkenlerinin eklenmesi.
-- [ ] Kontrol yüzeylerinin (Aileron, Elevator, Rudder) açılarının tanımlanması ve bunların uçak üzerinde oluşturduğu Tork'un (Döndürme Kuvveti) hesaplanması.
-- [ ] Hesaplanan tork ile açısal ivme ve açısal hızın Euler ile entegre edilmesi.
-- [ ] Açısal hız kullanılarak uçağın güncel yönelim (Quaternion) değerinin döndürülerek güncellenmesi.
+- [x] `Aircraft.h` içerisine Açısal Hız (Angular Velocity), Açısal İvme (Angular Acceleration) ve Atalet Momenti (Inertia) değişkenlerinin eklenmesi.
+- [x] Kontrol yüzeylerinin (Aileron, Elevator, Rudder) açılarının tanımlanması ve bunların uçak üzerinde oluşturduğu Tork'un (Döndürme Kuvveti) hesaplanması.
+- [x] Hesaplanan tork ile açısal ivme ve açısal hızın Euler ile entegre edilmesi.
+- [x] Açısal hız kullanılarak uçağın güncel yönelim (Quaternion) değerinin döndürülerek güncellenmesi.
+- [ ] ControlLoop içerisinden test manevraları (Örn: Sağa yatma) göndererek uçağın 3D uzayda dönüp dönmediğinin test edilmesi.
 
-## Aşama 9: Unity ile Canlı (Real-Time) UDP Haberleşmesi
-- [ ] C++ `TelemetryLoop` içerisine bir UDP Soket entegre edilerek uçağın pozisyon ve quaternion verilerinin saniyede 10 veya daha fazla kere yayınlanması (Broadcasting).
-- [ ] Unity tarafında bir C# script yazılarak bu UDP portunun dinlenmesi ve gelen 6-DOF verilerin 3D uçak modeline anlık olarak uygulanması.
+## Aşama 9: Web Üzerinden Canlı (Real-Time) 3D Görselleştirme
+- [ ] Unity yerine `Three.js` ve HTML5 kullanılarak uçuş verilerinin tarayıcı üzerinden 3D animasyonla izlenebilmesi.
+- [ ] C++ tarafından üretilen `flight_data.csv` dosyasının okunup uçağın takla ve irtifa hareketlerinin web ortamına yansıtılması.

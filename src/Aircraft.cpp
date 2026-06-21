@@ -7,6 +7,7 @@ using namespace chrono;
 Aircraft::Aircraft()
 {
     currentState = FlightState::INIT_BOOT;
+    inertia = Vector3(10000.0f, 20000.0f, 30000.0f);
 }
 
 Aircraft::~Aircraft()
@@ -20,7 +21,15 @@ void Aircraft::BootSystem()
     currentState = FlightState::IDLE;
 
     logFile.open("data/flight_data.csv");
-    logFile << "time,altitude,velocity,acceleration\n";
+    
+    //open the udp socket
+    udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    memset(&serverAddr, 0, sizeof(serverAddr));
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(5005); //port that python bridge listens to
+    inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr); // Localhost
+
+    logFile << "time,altitude,velocity,acceleration,qx,qy,qz,qw\n";
 
     //start the 3 threads
     physicsThread = thread(&Aircraft::PhysicsLoop, this);
@@ -37,6 +46,7 @@ void Aircraft::Shutdown()
     if(telemetryThread.joinable()) telemetryThread.join();
 
     logFile.close();
+    close(udpSocket);
 }
 
 Vector3 Aircraft::GetPosition()
@@ -74,6 +84,12 @@ float Aircraft::GetCurrentThrust()
 { 
     lock_guard<mutex> lock(stateMutex);
     return currentThrust; 
+}
+
+void Aircraft::SetPilotCommand(PilotCommand& cmd)
+{
+    lock_guard<mutex> lock(stateMutex);
+    currentPilotCommand = cmd;
 }
 
 void Aircraft::PhysicsLoop()
@@ -130,12 +146,57 @@ void Aircraft::PhysicsLoop()
 
         acc = totalForce / mass; //find the acceleration
 
+        //if the aircraft is fast enough bend the velocity vector to the aircraft look direction
+        if(velocity.Length() > 10.0f) 
+        {
+            Vector3 forwardDir = orientation.RotateVector(Vector3(0,0,1));
+            velocity = (velocity * 0.98f) + (forwardDir * velocity.Length() * 0.02f);
+        }
+
         {//to be able to release the lock immediately
             //velocity and position are shared variables so we need to protect them
             lock_guard<mutex> lock(stateMutex);
 
+            float q = 0.5f * RHO * velocity.LengthSquared(); //air flow
+            //then calculate the torque in the 3 axis
+            Vector3 torque;
+            torque.x = elevatorDeflection * q * 1.0f;
+            torque.y = rudderDeflection * q * 0.5f;
+            torque.z = aileronDeflection * q * 2.0f;
+
+            //then calculate the angular acceleration from torque and inertia
+            angularAcceleration = torque / inertia;
+
+            //again with euler integration find the velocity from acceleration
+            angularVelocity = angularVelocity + (angularAcceleration * dt); 
+
+            //damping factor decreases as velocity increases and rotating is suppressed
+            float dampingFactor = 1.0f - (0.01f + (velocity.Length() * 0.0001f));
+            if (dampingFactor < 0.5f) dampingFactor = 0.5f; //bound it
+
+            angularVelocity = angularVelocity * dampingFactor; //aerodynamic damping
+
+            float angleRad = angularVelocity.Length() * dt; //how many radians we turned in dt time?
+
+            if(angularVelocity.LengthSquared() > 0.000001f) //to avoid divide by zero
+            {
+                //update the orientation with that angularVelocity
+                //find the amount of rotation
+                Quaternion deltaRot = Quaternion::AngleAxis(angularVelocity.Normalized(), angleRad * (180.0f / PI));
+            
+                //multiply the old orientation with the new rotation amount to find new orientation
+                orientation = deltaRot * orientation;
+                orientation.Normalize(); //to avoid mathematical drifts 
+            }
+
             velocity = velocity + (acc * dt); //update the velocity
             position = position + (velocity * dt); //update the position
+        
+            if (position.y < 0.0f) 
+            {
+                position.y = 0.0f;
+                if (velocity.y < 0.0f) velocity.y = 0.0f;
+            }
         }
 
         this_thread::sleep_until(target_time); //job is done sleep until the target time
@@ -174,7 +235,9 @@ void Aircraft::ControlLoop()
                     currentThrust = 0;
                     //for now as we dont have an external command from pilot
                     //we change the state here to takeofff automatically, for test purposes
-                    currentState = FlightState::TAKEOFF;
+                    //currentState = FlightState::TAKEOFF;
+
+                    currentState = FlightState::MANUAL_FLIGHT;
                 
                     break;
 
@@ -192,14 +255,37 @@ void Aircraft::ControlLoop()
                     
                     if(velocity.Length() > 100.0f)
                     {
-                        currentState = FlightState::CRUISE;
+                        //currentState = FlightState::CRUISE;
+                        currentState = FlightState::MANUAL_FLIGHT;
                     }
+
+                    break;
+                
+                case FlightState::MANUAL_FLIGHT:
+                    
+                    currentThrust = currentPilotCommand.thrustTarget;
+                    aileronDeflection = currentPilotCommand.aileron;
+                    elevatorDeflection = currentPilotCommand.elevator;
+                    rudderDeflection = currentPilotCommand.rudder;
 
                     break;
 
                 case FlightState::CRUISE:
 
                     currentThrust = 30000.0f;
+                    
+                    if(i < 300) //first 3 seconds roll right
+                    {
+                        aileronDeflection = 1.0f;
+                    }
+                    else if(i < 500) //between 3-5 seconds fly straight
+                    {
+                        aileronDeflection = 0.0f; //we assume in 3 seconds aircrraft became straight by completing rolling
+                    }
+                    else
+                    {
+                        aileronDeflection = -1.0f;
+                    }
 
                     break;
                 
@@ -222,7 +308,7 @@ void Aircraft::TelemetryLoop()
 {
     auto period = milliseconds(100);
     auto target_time = steady_clock::now();
-
+    
     int i = 0;
 
     while(isRunning)
@@ -237,7 +323,17 @@ void Aircraft::TelemetryLoop()
             logFile << (i * 0.1f) << "," 
                     << position.y << "," 
                     << velocity.y << "," 
-                    << currentThrust << "\n";
+                    << currentThrust << "," 
+                    << orientation.x << "," 
+                    << orientation.y << "," 
+                    << orientation.z << "," 
+                    << orientation.w << "\n";
+            
+            char buffer[256];
+            //we write the time altitude and 4 orientation data into a c-like string that is gonna be sent to python script
+            sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f", (i * 0.1f), position.y, velocity.Length(), orientation.x, orientation.y, orientation.z, orientation.w);
+            //send the data through the port we opened
+            sendto(udpSocket, buffer, strlen(buffer), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
         }
 
         this_thread::sleep_until(target_time);

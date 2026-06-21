@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTOS 6-DOF Aircraft Visualizer</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #87CEEB; }
+        #info { 
+            position: absolute; top: 15px; left: 15px; 
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 16px;
+            color: #111; background: rgba(255,255,255,0.85); 
+            padding: 15px; border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="info">Loading Telemetry...</div>
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+
+        let scene, camera, renderer, aircraft;
+        let flightData = [];
+        let currentIndex = 0;
+        let lastTime = 0;
+
+        init();
+        loadDataAndPlay();
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x87CEEB, 20, 100);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3, -12);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(10, 20, 10);
+            scene.add(dirLight);
+
+            // Ground Grid
+            const gridHelper = new THREE.GridHelper(200, 200, 0x000000, 0x000000);
+            gridHelper.material.opacity = 0.15;
+            gridHelper.material.transparent = true;
+            scene.add(gridHelper);
+
+            // Build Aircraft Model
+            aircraft = new THREE.Group();
+            
+            // Fuselage (Gövde)
+            const fuselageGeo = new THREE.BoxGeometry(1, 1, 5);
+            const fuselageMat = new THREE.MeshStandardMaterial({ color: 0xcc0000 });
+            const fuselage = new THREE.Mesh(fuselageGeo, fuselageMat);
+            aircraft.add(fuselage);
+
+            // Wings (Kanatlar)
+            const wingGeo = new THREE.BoxGeometry(7, 0.1, 1.5);
+            const wingMat = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
+            const wing = new THREE.Mesh(wingGeo, wingMat);
+            wing.position.set(0, 0, 0.5);
+            aircraft.add(wing);
+
+            // Tail (Kuyruk Yatay)
+            const tailGeo = new THREE.BoxGeometry(2.5, 0.1, 1);
+            const tail = new THREE.Mesh(tailGeo, wingMat);
+            tail.position.set(0, 0, -2);
+            aircraft.add(tail);
+
+            // Vertical Stabilizer (Kuyruk Dikey)
+            const vertGeo = new THREE.BoxGeometry(0.1, 1.5, 1);
+            const vert = new THREE.Mesh(vertGeo, fuselageMat);
+            vert.position.set(0, 0.75, -2);
+            aircraft.add(vert);
+
+            scene.add(aircraft);
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function loadDataAndPlay() {
+            document.getElementById('info').innerHTML = `Waiting for Live Telemetry...<br>Make sure C++ Flight Sim is running.`;
+            
+            const ws = new WebSocket('ws://localhost:8081');
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                
+                // Apply the C++ Quaternion directly to the Three.js Object!
+                aircraft.quaternion.set(data.qx, data.qy, data.qz, data.qw);
+                
+                // Raise the altitude visually
+                aircraft.position.y = Math.min(data.alt / 10.0, 100); 
+                
+                // Make the camera follow the aircraft's altitude so it never goes out of view
+                camera.position.y = aircraft.position.y + 3;
+                camera.lookAt(aircraft.position);
+
+                document.getElementById('info').innerHTML = 
+                    `<b style="color:red">LIVE: Flight Control Computer Telemetry</b><br>` +
+                    `Time: ${data.time.toFixed(1)} s<br>` +
+                    `Altitude: ${data.alt.toFixed(1)} m<br>` +
+                    `Velocity: ${data.vel.toFixed(1)} m/s<br>` +
+                    `[Q]: ${data.qx.toFixed(2)}, ${data.qy.toFixed(2)}, ${data.qz.toFixed(2)}, ${data.qw.toFixed(2)}`;
+                
+                renderer.render(scene, camera);
+            };
+            ws.onerror = function() {
+                document.getElementById('info').innerHTML = `WebSocket Error.<br>Is python telemetry_server.py running?`;
+            };
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+</body>
+</html>
