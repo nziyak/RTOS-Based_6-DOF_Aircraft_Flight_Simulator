@@ -20,3 +20,4 @@ data/flight_data.csv
 # OS Specific
 .DS_Store
 Thumbs.db
+build-qt_dashboard*/

@@ -1158,3 +1158,52 @@ angularVelocity = angularVelocity * 0.99f; // Aerodynamic Damping (Hava sürtün
 ```
 
 Bu iki değişikliği yap, `make` at ve `visualizer.html`'den uçağın çok daha stabil ve "gerçekçi" bir uçak gibi nazlı nazlı döndüğünü izle!
+
+### User Input
+
+(Kayıt dışı görüşme - Kullanıcı interaktif kontrolleri ve web üzerinden canlı veri aktarımını eklemek istediğini belirtti.)
+
+### Planner Response
+
+Harika! Son konuştuğumuzdan bu yana projenin geldiği nokta gerçekten büyüleyici. Mevcut dosyalara ve git geçmişine bakarak o kayıt dışı diyalogda neleri başardığımızı gelecekteki senin için özetliyorum:
+
+**Birlikte Başardıklarımız (Gerçek Zamanlı Kontrol ve Telemetri Köprüsü):**
+
+1. **Manuel Uçuş ve İnteraktif Kontroller (MANUAL_FLIGHT):**
+   - `Aircraft::ControlLoop` içerisindeki durum makinesini (State Machine) güncelleyerek doğrudan `MANUAL_FLIGHT` (manuel uçuş) durumuna geçişi sağladık.
+   - Eski otonom (kendi kendine dönen) test mantığını kaldırıp, `main.cpp` içerisinde non-blocking (bloke etmeyen) klavye dinleme (`kbhit`) yapısını kurduk. Artık klavye girdileriyle Thrust (İtki), Aileron (Sağa/sola yatma), Elevator (Burnu kaldırma/indirme) ve Rudder (Kuyruk) kontrollerini pilot olarak anlık verebiliyoruz. Kontrollerin tuşu bırakınca eski haline dönmesi (auto-centering) mantığını da harika bir şekilde ekledik.
+
+2. **Gelişmiş Aerodinamik Uçuş Dinamikleri:**
+   - Yüksek hızlarda uçağın bir "uzay gemisi" gibi garip şekillerde kaymasını engellemek için, hıza bağlı aerodinamik sönümleme (dynamic damping) ve uçağın rüzgar gülü gibi hız vektörüne hizalanma (Weathervane grip effect) özelliklerini fizik motoruna (`Aircraft.cpp`) entegre ettik.
+
+3. **Gerçek Zamanlı (Live) UDP Telemetri Yayıncılığı:**
+   - Eskiden sadece `.csv` dosyasına yazıp uçuş bittikten sonra izleyebildiğimiz verileri canlandırdık! C++ tarafında `<sys/socket.h>` kullanarak uçuş verilerini (Yükseklik, Hız vektörü ve Quaternion) saniyede onlarca kez UDP paketleri olarak yayınlayan bir ağ (socket) yapısı kurduk.
+
+4. **Python WebSocket Köprüsü ve Canlı 3D Tarayıcı Entegrasyonu:**
+   - C++'ın fırlattığı UDP paketlerini havada kapıp web tarayıcısına aktarmak için Python ile bir WebSocket sunucusu (`telemetry_server.py`) inşa ettik. Hatalı matematiği yakalamak için NaN (Not a Number) filtreleme gibi güvenlik ağları da ekledik.
+   - `visualizer.html` dosyamızı, bu WebSocket'i dinleyecek şekilde baştan aşağı yeniledik. Ekrana eklediğimiz HUD (Head-Up Display) paneliyle yükseklik ve hız değerlerini canlı canlı, uçak 3 boyutlu uzayda taklalar atarken izleyebilir hale geldik.
+
+Böylece projenin en büyük dönüm noktalarından olan **İnteraktif Kontrol (Aşama 8)** ve **Canlı Web Görselleştirmesi (Aşama 9)** hedeflerini tamamen ve başarıyla tamamlamış olduk! Roadmap'i de bu harika ilerlemeye uygun olarak güncelledik. Bir sonraki hamlede uçuş dinamiklerine (PID gibi) ince ayarlar çekebilir veya rotayı daha farklı hedeflere çevirebiliriz. Mükemmel bir iş çıkardın!
+### User Input
+
+(Kayıt dışı görüşme - Proje mimari dokümantasyonunun hazırlanması ve Qt tabanlı masaüstü telemetri arayüzüne geçiş süreci üzerine çalışıldı.)
+
+### Planner Response
+
+Harika ilerlemeler kaydettik! Kaybolan o konuşmamızda yaptıklarımızı senin için proje dosyalarına ve güncel `roadmap.md`'ye bakarak özetliyorum:
+
+**Birlikte Başardıklarımız (Dokümantasyon ve Qt Dashboard Başlangıcı):**
+
+1. **Sistem Mimarisi Dokümantasyonu (`docs/Flight_Control_System_Architecture.md`):**
+   - Projenin başından beri kurduğumuz Multithreaded RTOS yapısını, Euler fiziklerini, `Aircraft`, `Vector3` ve `Quaternion` sınıfları arasındaki (UML) ilişkilerini akademik bir dille anlatan profesyonel bir mimari doküman (ve PDF sürümünü) oluşturduk.
+
+2. **Aşama 10'a Geçiş: Qt Masaüstü Arayüzü Başlangıcı (`qt_dashboard/`):**
+   - Web tarayıcısı üzerinden izlediğimiz 3D simülasyondan daha profesyonel bir arayüze geçiş yapmak için **Qt** projemizin iskeletini kurduk.
+   - `UdpReceiver` adında yeni bir C++ sınıfı tasarladık. `QUdpSocket` kullanarak uçuş simülatörünün verileri gönderdiği `localhost:5005` portunu dinlemeye başladık.
+   - Arayüzün donmasını engellemek için Qt'nin meşhur **Signals & Slots** mekanizmasını (`connect(socket, &QUdpSocket::readyRead, ...)`) başarıyla entegre ettik.
+
+**Sırada Ne Var? (Şu An Buradayız 📍):**
+`udpreceiver.cpp` içindeki `processPendingDatagrams` fonksiyonumuzda paketleri yakalıyoruz ama içi şimdilik boş (`while(socket->hasPendingDatagrams()) { }`).
+Bundan sonraki ilk adımımız, gelen bu paketlerin içindeki İrtifa (Altitude) ve Hız (Velocity) gibi verileri parse edip `MainWindow` üzerindeki grafiklere/göstergelere gerçek zamanlı (real-time) olarak çizdirmek olacak.
+
+Kaldığımız yerden hız kesmeden devam edebiliriz!

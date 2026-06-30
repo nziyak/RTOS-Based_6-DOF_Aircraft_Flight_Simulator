@@ -36,13 +36,19 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] Sistemin INIT'ten CRUISE aşamasına kadar kesintisiz uçurulması (Bir senaryo çalıştırılması).
 - [x] Oluşturulan `.csv` dosyasındaki verilerin (İrtifa - Zaman, Hız - Zaman grafikleri gibi) doğruluğunun ve fizik kurallarına uygunluğunun harici bir araçla (Python/Matplotlib veya Excel) çizdirilerek doğrulanması.
 
-## Aşama 8: Rotasyonel Dinamikler (3D Hareket) (ŞU AN BURADAYIZ) 📍
+## Aşama 8: Rotasyonel Dinamikler (3D Hareket) (TAMAMLANDI) 🏁
 - [x] `Aircraft.h` içerisine Açısal Hız (Angular Velocity), Açısal İvme (Angular Acceleration) ve Atalet Momenti (Inertia) değişkenlerinin eklenmesi.
 - [x] Kontrol yüzeylerinin (Aileron, Elevator, Rudder) açılarının tanımlanması ve bunların uçak üzerinde oluşturduğu Tork'un (Döndürme Kuvveti) hesaplanması.
 - [x] Hesaplanan tork ile açısal ivme ve açısal hızın Euler ile entegre edilmesi.
 - [x] Açısal hız kullanılarak uçağın güncel yönelim (Quaternion) değerinin döndürülerek güncellenmesi.
-- [ ] ControlLoop içerisinden test manevraları (Örn: Sağa yatma) göndererek uçağın 3D uzayda dönüp dönmediğinin test edilmesi.
+- [x] ControlLoop içerisinden test manevraları (Örn: Sağa yatma) göndererek uçağın 3D uzayda dönüp dönmediğinin test edilmesi.
 
-## Aşama 9: Web Üzerinden Canlı (Real-Time) 3D Görselleştirme
-- [ ] Unity yerine `Three.js` ve HTML5 kullanılarak uçuş verilerinin tarayıcı üzerinden 3D animasyonla izlenebilmesi.
-- [ ] C++ tarafından üretilen `flight_data.csv` dosyasının okunup uçağın takla ve irtifa hareketlerinin web ortamına yansıtılması.
+## Aşama 9: Web Üzerinden Canlı (Real-Time) 3D Görselleştirme (TAMAMLANDI) 🏁
+- [x] Unity yerine `Three.js` ve HTML5 kullanılarak uçuş verilerinin tarayıcı üzerinden 3D animasyonla izlenebilmesi.
+- [x] C++ UDP soketi ve Python WebSocket kullanılarak uçağın takla ve irtifa hareketlerinin web ortamına yansıtılması.
+
+## Aşama 10: Masaüstü Telemetri Arayüzü (Qt & C++) (ŞU AN BURADAYIZ) 📍
+- [ ] Uçuş simülatörü klasörü altında Qt projesinin ve GUI'nin oluşturulması.
+- [ ] Arayüzün donmasını engellemek için Qt Signals & Slots ve QThread mimarisinin kurulması.
+- [ ] `QUdpSocket` kullanılarak simülatörden gelen gerçek zamanlı UDP uçuş verilerinin (10Hz) dinlenmesi.
+- [ ] Gelen İrtifa (Altitude) ve Hız (Velocity) verilerinin arayüzde gerçek zamanlı (real-time) grafiklerle (plot/gauge) çizdirilmesi.
