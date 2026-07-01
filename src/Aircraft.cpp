@@ -4,14 +4,16 @@
 
 using namespace chrono;
 
-Aircraft::Aircraft() {
+Aircraft::Aircraft() 
+{
   currentState = FlightState::INIT_BOOT;
   inertia = Vector3(10000.0f, 20000.0f, 30000.0f);
 }
 
 Aircraft::~Aircraft() { Shutdown(); }
 
-void Aircraft::BootSystem() {
+void Aircraft::BootSystem() 
+{
   isRunning = true;
   currentState = FlightState::IDLE;
 
@@ -32,7 +34,8 @@ void Aircraft::BootSystem() {
   telemetryThread = thread(&Aircraft::TelemetryLoop, this);
 }
 
-void Aircraft::Shutdown() {
+void Aircraft::Shutdown() 
+{
   isRunning = false;
 
   if (physicsThread.joinable())
@@ -46,44 +49,52 @@ void Aircraft::Shutdown() {
   close(udpSocket);
 }
 
-Vector3 Aircraft::GetPosition() {
+Vector3 Aircraft::GetPosition() 
+{
   lock_guard<mutex> lock(stateMutex);
   return position;
 }
 
-float Aircraft::GetMass() {
+float Aircraft::GetMass() 
+{
   lock_guard<mutex> lock(stateMutex);
   return mass;
 }
 
 // normally wing area, lift coef and drag coef could be constant but i think
 // about their possibility of change
-float Aircraft::GetWingArea() {
+float Aircraft::GetWingArea() 
+{
   lock_guard<mutex> lock(stateMutex);
   return wingArea;
 }
 
-float Aircraft::GetLiftCoef() {
+float Aircraft::GetLiftCoef() 
+{
   lock_guard<mutex> lock(stateMutex);
   return liftCoefficient;
 }
 
-float Aircraft::GetDragCoef() {
+float Aircraft::GetDragCoef() 
+{
   lock_guard<mutex> lock(stateMutex);
   return dragCoefficient;
 }
 
-float Aircraft::GetCurrentThrust() {
+float Aircraft::GetCurrentThrust() 
+{
   lock_guard<mutex> lock(stateMutex);
   return currentThrust;
 }
 
-void Aircraft::SetPilotCommand(PilotCommand &cmd) {
+void Aircraft::SetPilotCommand(PilotCommand &cmd) 
+{
   lock_guard<mutex> lock(stateMutex);
   currentPilotCommand = cmd;
 }
 
-void Aircraft::PhysicsLoop() {
+void Aircraft::PhysicsLoop() 
+{
   auto period = milliseconds(1); // to achieve 1000 hz
   auto target_time = steady_clock::now();
 
@@ -111,7 +122,8 @@ void Aircraft::PhysicsLoop() {
 
   Vector3 totalForce;
 
-  while (isRunning) {
+  while (isRunning) 
+  {
     target_time += period; // will wake up after 1 milliseconds
 
     this_thread::sleep_for(microseconds(
@@ -209,7 +221,8 @@ void Aircraft::PhysicsLoop() {
   }
 }
 
-void Aircraft::ControlLoop() {
+void Aircraft::ControlLoop() 
+{
   auto period = milliseconds(10); // to achieve 100 hz
   auto target_time = steady_clock::now();
 
@@ -302,13 +315,15 @@ void Aircraft::ControlLoop() {
   }
 }
 
-void Aircraft::TelemetryLoop() {
+void Aircraft::TelemetryLoop() 
+{
   auto period = milliseconds(100);
   auto target_time = steady_clock::now();
 
   int i = 0;
 
-  while (isRunning) {
+  while (isRunning) 
+  {
     target_time += period;
 
     this_thread::sleep_for(
