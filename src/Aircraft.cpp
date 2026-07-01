@@ -327,9 +327,18 @@ void Aircraft::TelemetryLoop() {
       sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f,%f", (i * 0.1f), position.y,
               velocity.Length(), currentThrust, orientation.x, orientation.y,
               orientation.z, orientation.w);
-      // send the data through the port we opened
+
+      // send the data through the ports we opened
+
+      // send to qt dashboard (port 5005)
       sendto(udpSocket, buffer, strlen(buffer), 0,
              (struct sockaddr *)&serverAddr, sizeof(serverAddr));
+
+      // send to python web server (port 5006)
+      struct sockaddr_in webAddr = serverAddr;
+      webAddr.sin_port = htons(5006);
+      sendto(udpSocket, buffer, strlen(buffer), 0, (struct sockaddr *)&webAddr,
+             sizeof(webAddr));
     }
 
     this_thread::sleep_until(target_time);

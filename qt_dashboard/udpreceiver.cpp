@@ -8,7 +8,11 @@ UdpReceiver::UdpReceiver(QObject *parent) : QObject{parent}
     socket = new QUdpSocket(this);
 
     //simulator sends the packages to localhost:5005, listen that port
-    socket->bind(QHostAddress::LocalHost, 5005);
+    if (!socket->bind(QHostAddress::LocalHost, 5005))
+    {
+        qDebug() << "HATA: 5005 portu zaten kullanımda! Eski uygulamayı kapatın.";
+    }
+
 
     //Qt's connect property.
     //if readyRead signal comes from the socket object,

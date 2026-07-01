@@ -47,8 +47,8 @@ Bu doküman, projenin başından sonuna kadar sıfırdan tamamen çalışan bir 
 - [x] Unity yerine `Three.js` ve HTML5 kullanılarak uçuş verilerinin tarayıcı üzerinden 3D animasyonla izlenebilmesi.
 - [x] C++ UDP soketi ve Python WebSocket kullanılarak uçağın takla ve irtifa hareketlerinin web ortamına yansıtılması.
 
-## Aşama 10: Masaüstü Telemetri Arayüzü (Qt & C++) (ŞU AN BURADAYIZ) 📍
-- [ ] Uçuş simülatörü klasörü altında Qt projesinin ve GUI'nin oluşturulması.
-- [ ] Arayüzün donmasını engellemek için Qt Signals & Slots ve QThread mimarisinin kurulması.
-- [ ] `QUdpSocket` kullanılarak simülatörden gelen gerçek zamanlı UDP uçuş verilerinin (10Hz) dinlenmesi.
-- [ ] Gelen İrtifa (Altitude) ve Hız (Velocity) verilerinin arayüzde gerçek zamanlı (real-time) grafiklerle (plot/gauge) çizdirilmesi.
+## Aşama 10: Masaüstü Telemetri Arayüzü (Qt & C++) (TAMAMLANDI) 🏁
+- [x] Uçuş simülatörü klasörü altında Qt projesinin ve GUI'nin oluşturulması.
+- [x] Arayüzün donmasını engellemek için Qt Signals & Slots ve QThread mimarisinin kurulması.
+- [x] `QUdpSocket` kullanılarak simülatörden gelen gerçek zamanlı UDP uçuş verilerinin (10Hz) dinlenmesi.
+- [x] Gelen İrtifa (Altitude) ve Hız (Velocity) verilerinin arayüzde gerçek zamanlı (real-time) grafiklerle (plot/gauge) çizdirilmesi.

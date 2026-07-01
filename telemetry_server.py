@@ -4,7 +4,7 @@ import socket
 import json
 
 UDP_IP = "127.0.0.1"
-UDP_PORT = 5005
+UDP_PORT = 5006
 WS_PORT = 8081
 
 connected_clients = set()
@@ -42,10 +42,11 @@ async def udp_listener():
                     "time": float(parts[0]),
                     "alt": float(parts[1]),
                     "vel": float(parts[2]),
-                    "qx": float(parts[3]),
-                    "qy": float(parts[4]),
-                    "qz": float(parts[5]),
-                    "qw": float(parts[6])
+                    "thrust": float(parts[3]), 
+                    "qx": float(parts[4]),
+                    "qy": float(parts[5]),
+                    "qz": float(parts[6]),
+                    "qw": float(parts[7])
                 })
                 # Broadcast to all connected WebSockets
                 websockets.broadcast(connected_clients, payload)

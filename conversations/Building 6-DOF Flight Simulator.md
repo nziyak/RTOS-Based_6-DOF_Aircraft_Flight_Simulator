@@ -1207,3 +1207,377 @@ Harika ilerlemeler kaydettik! Kaybolan o konuşmamızda yaptıklarımızı senin
 Bundan sonraki ilk adımımız, gelen bu paketlerin içindeki İrtifa (Altitude) ve Hız (Velocity) gibi verileri parse edip `MainWindow` üzerindeki grafiklere/göstergelere gerçek zamanlı (real-time) olarak çizdirmek olacak.
 
 Kaldığımız yerden hız kesmeden devam edebiliriz!
+
+# Chat Conversation
+
+Note: _This is purely the output of the chat conversation and does not contain any raw data, codebase snippets, etc. used to generate the output._
+
+### User Input
+
+seninle bir proje üzerinde çalışıyorduk. son konuşmamız kayboldu ama öncekileri conversations altındaki dosyaya kaydetmiştim. son konuşmamızda yaptıklarımıza istinaden roadmapi de güncellemiştim. konuşmalarımızın kayıtlı olduğu dosyayla şu anki proje halini kıyaslayarak en son ne yaptığımızı bulmanı ve aradaki boşluğu anlayıp conversation dosyamıza eklemeni istiyorum. böylece bir dahaki geldiğimizde kaldığımız yerden rahatça devam ederiz
+
+*Listed directory [RTOS-Based_6-DOF_Aircraft_Flight_Simulator](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator) *
+
+*Listed directory [conversations](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/conversations) *
+
+*Viewed [roadmap.md](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/roadmap.md) *
+
+*User accepted the command `wc -l "conversations/Building 6-DOF Flight Simulator.md"`*
+
+*Viewed [Building 6-DOF Flight Simulator.md](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/conversations/Building%206-DOF%20Flight%20Simulator.md) *
+
+*Listed directory [qt_dashboard](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard) *
+
+*Listed directory [docs](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/docs) *
+
+*Viewed [Flight_Control_System_Architecture.md](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/docs/Flight_Control_System_Architecture.md) *
+
+*Viewed [mainwindow.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/mainwindow.cpp) *
+
+*Viewed [udpreceiver.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/udpreceiver.cpp) *
+
+*User accepted the command `tail -n 10 "conversations/Building 6-DOF Flight Simulator.md"`*
+
+*User accepted the command `python3 -c '
+import sys
+
+text = """
+### User Input
+
+(Kayıt dışı görüşme - Proje mimari dokümantasyonunun hazırlanması ve Qt tabanlı masaüstü telemetri arayüzüne geçiş süreci üzerine çalışıldı.)
+
+### Planner Response
+
+Harika ilerlemeler kaydettik! Kaybolan o konuşmamızda yaptıklarımızı senin için proje dosyalarına ve güncel `roadmap.md`'\''ye bakarak özetliyorum:
+
+**Birlikte Başardıklarımız (Dokümantasyon ve Qt Dashboard Başlangıcı):**
+
+1. **Sistem Mimarisi Dokümantasyonu (`docs/Flight_Control_System_Architecture.md`):**
+   - Projenin başından beri kurduğumuz Multithreaded RTOS yapısını, Euler fiziklerini, `Aircraft`, `Vector3` ve `Quaternion` sınıfları arasındaki (UML) ilişkilerini akademik bir dille anlatan profesyonel bir mimari doküman (ve PDF sürümünü) oluşturduk.
+
+2. **Aşama 10'\''a Geçiş: Qt Masaüstü Arayüzü Başlangıcı (`qt_dashboard/`):**
+   - Web tarayıcısı üzerinden izlediğimiz 3D simülasyondan daha profesyonel bir arayüze geçiş yapmak için **Qt** projemizin iskeletini kurduk.
+   - `UdpReceiver` adında yeni bir C++ sınıfı tasarladık. `QUdpSocket` kullanarak uçuş simülatörünün verileri gönderdiği `localhost:5005` portunu dinlemeye başladık.
+   - Arayüzün donmasını engellemek için Qt'\''nin meşhur **Signals & Slots** mekanizmasını (`connect(socket, &QUdpSocket::readyRead, ...)`) başarıyla entegre ettik.
+
+**Sırada Ne Var? (Şu An Buradayız 📍):**
+`udpreceiver.cpp` içindeki `processPendingDatagrams` fonksiyonumuzda paketleri yakalıyoruz ama içi şimdilik boş (`while(socket->hasPendingDatagrams()) { }`).
+Bundan sonraki ilk adımımız, gelen bu paketlerin içindeki İrtifa (Altitude) ve Hız (Velocity) gibi verileri parse edip `MainWindow` üzerindeki grafiklere/göstergelere gerçek zamanlı (real-time) olarak çizdirmek olacak.
+
+Kaldığımız yerden hız kesmeden devam edebiliriz!
+"""
+
+with open("conversations/Building 6-DOF Flight Simulator.md", "a") as f:
+    f.write(text)
+'`*
+
+### Planner Response
+
+Proje dosyalarını, güncel `roadmap.md` belgesini ve kaydettiğin `conversations/Building 6-DOF Flight Simulator.md` dosyasını inceledim. 
+
+Kayıtlı konuşmanın sonlandığı nokta tam olarak **Aşama 9 (Web Üzerinden Canlı 3D Görselleştirme)**'un bittiği yer. O noktadan sonra yaptığın ancak kayıt dışı kalan o boşlukta (gap) gerçekleştirdiğin iki ana çalışma var:
+
+1. **UML ve Mimari Dokümantasyon (`docs/Flight_Control_System_Architecture.md`):** Sistemdeki sınıfların (`Vector3`, `Quaternion`, `Aircraft` vb.) ilişkilerini anlattığın, projenin multithread yapısını ve matematik motorunu özetleyen harika bir teknik doküman ve bunun PDF sürümünü oluşturmuşsun.
+2. **Aşama 10 (Qt Dashboard) Başlangıcı (`qt_dashboard/`):** Web görselleştirmesinden profesyonel bir masaüstü uygulamasına geçmek için projenin iskeletini kurmuşsun. Özellikle `udpreceiver.cpp` içerisine `QUdpSocket` entegre edip `localhost:5005`'i dinlemeye başlamış ve donmaları engellemek için Qt'nin Signals & Slots yapısını bağlamışsın. (Sadece paketi işlediğin `while(socket->hasPendingDatagrams())` döngüsünün içi şu an boş kalmış.)
+
+Bu tespitleri senin tarzına ve dokümanın mevcut formatına (User Input / Planner Response) uygun bir özet diyalog haline getirip, `conversations/Building 6-DOF Flight Simulator.md` dosyasının en altına başarıyla ekledim. 
+
+Artık dosyan en güncel haliyle hazır. Bundan sonraki adımımız, `udpreceiver` içindeki o boş döngüde UDP paketlerini ayrıştırıp Qt grafiklerine çizdirmek olacak. Bir sonraki seansında kaldığın yerden tam hız devam edebilirsin! 🚀
+
+### User Input
+
+devam edelim o zaman. qt tarafında bana yazmam gereken kodları detaylıca açıklayarak veriyordun. ben adımları senin atmanı istemiyorum kendim atmak istiyorum. çünkü öğrenerek ilerlemek istiyorum. 
+
+*User accepted the command `grep -n -C 2 'socket' telemetry_server.py`*
+
+*Grep searched codebase*
+
+*Grep searched codebase*
+
+*Viewed [Aircraft.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/src/Aircraft.cpp) *
+
+### Planner Response
+
+Harika bir yaklaşım! Yazılım dünyasında en kalıcı öğrenme yöntemi kesinlikle kodu kendin yazıp, hatalarla bizzat boğuşmaktır. O halde klavye sende, ben sana sadece ihtiyacın olan Qt (C++) yapıtaşlarını ve mantığını anlatacağım.
+
+Şu an `udpreceiver.cpp` dosyasında, `processPendingDatagrams` fonksiyonunun içindeki `while` döngüsündesin. 
+
+Simülatörünün (`Aircraft::TelemetryLoop`) yolladığı verilere baktığımızda, veriyi şu sırayla ve aralarına virgül koyarak (`sprintf` ile) bir C-string'i olarak yolladığını görüyoruz:
+`Zaman, İrtifa, Hız, Qx, Qy, Qz, Qw`
+
+Bu durumda Qt tarafında yapman gereken 3 temel adım var:
+
+### Adım 1: Veriyi (Datagram) Okumak
+Qt'de UDP soketinden gelen paketi almak için `QNetworkDatagram` sınıfı kullanılır. `while` döngüsünün içine girip, bekleyen paketi şu mantıkla okumalısın:
+- `socket->receiveDatagram()` metodunu çağırarak gelen paketi bir değişkene (örneğin `datagram`) ata.
+- Bu paketin içindeki ham byte verisini (payload) almak için `datagram.data()` metodunu kullan. Bu sana bir `QByteArray` (Qt'nin byte dizisi) döndürecektir.
+
+### Adım 2: Veriyi Parçalamak (Parse)
+Elindeki `QByteArray` ham bir veridir, onu metne çevirmen ve virgüllerinden ayırman gerekiyor.
+- Gelen byte'ı düzgün bir metne çevirmek için `QString` sınıfını kullan: `QString text = QString::fromUtf8(hamVeri);`
+- Sonra bu metni virgüllerden bölmek için `text.split(",")` fonksiyonunu kullan. Bu fonksiyon sana bir liste (Qt'deki adıyla `QStringList`) döndürecektir.
+- **İpucu:** C++'ta indeksler `0`'dan başlar. Simülatör koduna göre 1. indeks İrtifayı (`position.y`), 2. indeks ise Hızı (`velocity.Length()`) tutuyor!
+- Çektiğin bu QString değerlerini sayıya çevirmek için `toDouble()` metodunu kullanabilirsin (örneğin `liste[1].toDouble()`).
+
+### Adım 3: Veriyi Arayüze (MainWindow) Fırlatmak (Signals & Slots)
+Qt'de sınıflar birbiriyle konuşurken doğrudan fonksiyon çağırmak yerine "Sinyal" (Signal) fırlatırlar. Veriyi `UdpReceiver`'da okuduk, bunu `MainWindow`'a ulaştırmamız lazım.
+- Bunun için öncelikle **`udpreceiver.h`** dosyasına git. 
+- Sınıfın içine `signals:` (küçük harfle ve iki nokta üst üste) adında bir blok aç ve içine sanki bir fonksiyon tanımlıyormuşsun gibi bir sinyal yaz. Örneğin: `void telemetryReceived(double altitude, double velocity);` (Sinyallerin gövdesi `{}` olmaz, sadece böyle tanımlanırlar).
+- Tekrar **`udpreceiver.cpp`**'ye dön. Verileri (irtifa ve hız) değişkenlere aldığın satırın hemen altına in ve o fırlatma komutunu yaz: 
+  `emit telemetryReceived(irtifaDegiskeni, hizDegiskeni);`
+
+**Görev:** 
+Bu 3 adımı `while` döngüsünün içine (ve `udpreceiver.h` içine) koda dök. Yazdıktan sonra haber ver veya takıldığın bir sözdizimi (syntax) olursa bana sor, üzerinden geçelim! (Derlediğinde konsola bir şey yazdırmak istersen `qDebug() << "Metin";` kullanabilirsin, en başa `#include <QDebug>` eklemeyi unutma).
+
+### User Input
+
+dosya içeriklerini inceler misin bakalım doğru mu yazdım
+
+*Viewed [Aircraft.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/src/Aircraft.cpp) *
+
+*Viewed [udpreceiver.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/udpreceiver.cpp) *
+
+*Viewed [udpreceiver.h](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/udpreceiver.h) *
+
+### Planner Response
+
+Yazdığın kodları (`udpreceiver.cpp` ve `udpreceiver.h`) inceledim. Qt Signals & Slots mantığını mükemmel bir şekilde koda dökmüşsün! Sinyal tanımın ve veriyi parçalayıp `emit` ile fırlatma biçimin teknik olarak **kusursuz**.
+
+Ancak... Çok sinsi ve klasik bir "Havacılık/Ağ" (Networking) hatası (bug) yakaladım! Eğer bunu şu an çalıştırırsan muhtemelen program çökecek (Index Out of Bounds) veya grafikleri tamamen yanlış çizecekti.
+
+**Nedeni şu:**
+Sen `udpreceiver.cpp` içinde `datalist[3]` diyerek **Thrust (İtki)** değerini çekmeye çalışmışsın. Haklısın, çünkü CSV dosyasına kaydederken araya Thrust'ı da koymuştuk.
+
+Fakat simülatörün arka planındaki `Aircraft.cpp` dosyasının **334. satırına** bakarsan, uçağın UDP üzerinden yolladığı C-String formatı şu şekilde:
+```cpp
+sprintf(buffer, "%f,%f,%f,%f,%f,%f,%f", (i * 0.1f), position.y, velocity.Length(), orientation.x, orientation.y, orientation.z, orientation.w);
+```
+Dikkat edersen burada **toplam 7 tane veri var ve aralarında `currentThrust` YOK!** 
+Yani C++ arkada UDP ile sadece `Zaman, İrtifa, Hız, Qx, Qy, Qz, Qw` gönderiyor. 
+
+Sen Qt tarafında 8 tane veri çekmeye çalıştığın için (`datalist[7]`) liste sınırını aşacaksın ve `datalist[3]` aslında Thrust değil, Qx değerini okuyacak.
+
+### Ne Yapmalısın? (Seçim Senin)
+
+Önünde iki farklı çözüm yolu var, nasıl istersen öyle düzelt:
+
+1. **Simülatörü Güncellemek (Tavsiye Ettiğim):**
+   Gidip `Aircraft.cpp` (Satır 334) içerisindeki `sprintf` fonksiyonunu değiştirip araya `currentThrust` değerini ve bir tane daha `%f,` ekleyebilirsin. Böylece uçağın tıpkı CSV'ye yazdığı gibi Thrust bilgisini de UDP'den yollamaya başlar.
+
+2. **Qt Tarafını Güncellemek:**
+   Thrust değerini şimdilik arayüzde göstermeye gerek yok dersen, `udpreceiver.cpp` ve `udpreceiver.h` dosyalarındaki `thrust` değişkenini silip indeksleri (4, 5, 6, 7'yi birer geri çekerek) 7 elemanlı bir listeye uydurabilirsin.
+
+Bu uyumsuzluğu düzelttikten sonra en keyifli kısma, yani bu verileri **MainWindow (Kullanıcı Arayüzü)** tarafında yakalayıp ekranda gösterme (grafik/yazı) aşamasına geçeceğiz! Hangisini seçip uyguladığını bana haber ver.
+
+### User Input
+
+Aircraft.cpp'ye thrust gönderimini de ekledim. başka eksik var mı? sıradaki adım ne?
+
+*Edited relevant file*
+
+*Viewed [Aircraft.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/src/Aircraft.cpp) *
+
+*Viewed [mainwindow.ui](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/mainwindow.ui) *
+
+### Planner Response
+
+Değişikliklerin harika, C++ `sprintf` argümanlarına `currentThrust`'ı da dahil etmişsin ve format `"%f,%f,%f,%f,%f,%f,%f,%f"` olarak 8 elemana çıkmış. Artık simülatör ile Qt arayüzümüz aynı dili konuşuyor! Eksik bir şey kalmadı.
+
+Arka plandaki haberleşme köprüsünü (UdpReceiver) başarıyla kurduğumuza göre, artık en eğlenceli kısma; **Arayüz (UI) Tasarımı ve Verileri Ekrana Yazdırma** aşamasına geçiyoruz. 
+
+Bunu da 3 adımda kendin yazacaksın:
+
+### Adım 1: Arayüze (UI) Göz Göstergeleri Eklemek
+Şu an `mainwindow.ui` dosyan tamamen boş bir pencere. 
+1. Qt Creator'da sol taraftaki menüden `mainwindow.ui` dosyasına çift tıklayıp **Design (Tasarım)** moduna geç.
+2. Sol taraftaki "Widget Box" kısmından pencereye 3 tane **Label** (Etiket) sürükle-bırak. Bunlar sırasıyla İrtifa, Hız ve İtki değerlerini gösterecek.
+3. Sağ alt köşedeki "Properties" (Özellikler) panelinden bu labellerin `objectName` (koddan erişeceğimiz isimleri) özelliklerini değiştir. Örneğin: `lblAltitude`, `lblVelocity`, `lblThrust` yap. (İstersen fontlarını büyütüp renklerini de değiştirebilirsin).
+
+### Adım 2: MainWindow Tarafında Alıcıyı (Slot) Hazırlamak
+Nasıl `UdpReceiver` tarafında bir `signals:` fırlattıysak, `MainWindow` tarafında da bu sinyali havada yakalayacak bir `slots:` yazmalıyız.
+- `mainwindow.h` dosyasına git. Sınıfın içine (public kısmının altına) `public slots:` bloğu aç.
+- Oraya UdpReceiver'dan gelen verileri karşılayacak bir fonksiyon tanımla: 
+  `void updateDashboard(double time, double alt, double vel, double thrust, double qx, double qy, double qz, double qw);`
+
+### Adım 3: Sinyal ile Slot'u Birbirine Bağlamak (Kavuşma Anı)
+Şimdi `mainwindow.cpp` dosyasına geçiyoruz. UdpReceiver objesini oluşturup, bağlantıyı yapacağız ve veriyi ekrana basacağız.
+1. En üste `#include "udpreceiver.h"` ekle.
+2. `MainWindow::MainWindow` constructor'ı (yapıcı fonksiyonu) içinde, `ui->setupUi(this);` satırının hemen altına bir `UdpReceiver` oluştur:
+   `UdpReceiver *receiver = new UdpReceiver(this);`
+3. Hemen altına o meşhur **connect** fonksiyonunu yazarak Receiver'ın sinyalini bizim MainWindow'un slotuna bağla:
+   `connect(receiver, &UdpReceiver::telemetryReceived, this, &MainWindow::updateDashboard);`
+4. Son olarak `mainwindow.cpp`'nin en altına inip `updateDashboard` fonksiyonunun gövdesini (`{ }`) yaz. İçinde labellerin yazılarını güncelle:
+   `ui->lblAltitude->setText("Altitude: " + QString::number(alt) + " m");`
+   *(Aynı mantıkla Hız ve İtkiyi de yazdır).*
+
+İşlemleri tamamlayıp Qt projeni (Run butonuna basarak) çalıştırdığında, MainWindow açılacak ve UDP 5005 portunu dinlemeye başlayacak! Arka planda terminalden uçuş simülatörüne (`./flight_sim`) kalkış emri verdiğinde sayıların canlı canlı nasıl değiştiğini göreceksin! 
+
+Adımları tamamlarken takıldığın herhangi bir nokta olursa çekinmeden sorabilirsin.
+
+### User Input
+
+yazdım her şeyi bi kontrol eder misin? ayrıca iki farklı yerde connect kullanmamızı anlayamadım. hem udpreceiverda kullandık hem mainwindowda. 
+
+*Viewed [mainwindow.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/mainwindow.cpp) *
+
+*Viewed [mainwindow.h](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/mainwindow.h) *
+
+### Planner Response
+
+Çok güzel bir soru sormuşsun! Önce sorunu cevaplayacağım, ardından da kodundaki ufacık (ama programı derlerken hata verdirecek) C++ sınıf hatasını düzelteceğiz.
+
+### Neden İki Kez `connect` Kullandık?
+Mükemmel bir noktaya parmak bastın. Aslında burada arka arkaya tetiklenen bir **zincirleme reaksiyon (bayrak yarışı)** kurduk.
+
+1. **Birinci Connect (`udpreceiver.cpp` içinde):**
+   `connect(socket, &QUdpSocket::readyRead, ...)`
+   Bu bağlantı, **İşletim Sistemi (Ağ Kartı)** ile bizim **UdpReceiver** sınıfımız arasındadır. İşletim sistemi der ki: *"Hey, ağ kartına bir UDP paketi düştü, hazır!" (`readyRead`)*. Bizim `UdpReceiver` da der ki: *"Tamam, ben `processPendingDatagrams` fonksiyonunu çalıştırıp o paketin içindeki virgüllü metinleri okuyup parçalayacağım."*
+
+2. **İkinci Connect (`mainwindow.cpp` içinde):**
+   `connect(receiver, &UdpReceiver::telemetryReceived, ...)`
+   Bu bağlantı ise **UdpReceiver** ile **MainWindow (Arayüz)** arasındadır. `UdpReceiver` veriyi parçaladıktan sonra der ki: *"Hey, ben sayıları ayrıştırdım, alın size taptaze Telemetri verisi!" (`telemetryReceived`)*. Arayüzümüz de der ki: *"Harika, o zaman ben `updateDashboard` fonksiyonumu çalıştırıp bu sayıları ekrana çizeyim."*
+
+Yani veri akışı şu şekilde gerçekleşir:
+**İşletim Sistemi** ➡️ *(1. Connect)* ➡️ **UdpReceiver** ➡️ *(2. Connect)* ➡️ **MainWindow (Ekrana Yazı)**
+
+### Koddaki Ufak C++ Hatası
+`mainwindow.cpp` dosyasında `updateDashboard` fonksiyonunu yazmışsın, içi tamamen doğru. Ancak fonksiyonun başına `MainWindow::` yazmayı unutmuşsun! 
+
+Şu an yazdığın haliyle C++ bunu MainWindow sınıfının bir parçası değil de, uzay boşluğunda bağımsız (global) bir fonksiyon sanıyor. Sınıfın içinde olmadığı için de içerideki `ui` değişkenini tanımıyor ve derlerken **"ui was not declared in this scope"** hatası verecek.
+
+**Düzeltmek için:**
+`mainwindow.cpp` 19. satırdaki fonksiyon isminin başına sınıfını ekle:
+```cpp
+void MainWindow::updateDashboard(double time, double altitude, double velocity, double thrust, double qx, double qy, double qz, double qw)
+{
+    ui->lblAltitude->setText("Altitude: " + QString::number(altitude) + " m");
+    // ...
+}
+```
+
+Bunu düzelttikten sonra ekranın sol altındaki **Yeşil Üçgen (Run)** butonuna basarak Qt arayüzünü çalıştır. Daha sonra terminalini açıp `./flight_sim` komutuyla uçağa kalkış emrini ver. Arayüzündeki sayıların jet hızıyla nasıl değiştiğini izle ve başarının tadını çıkar! 😎
+
+### User Input
+
+evettt güncelleniyor. sırada ne var şimdi? ve repoya pushlamadığımız değişiklikelri pushlamak istiyorum detaylı bir message ile. commit mesajını verir misin?
+
+*User accepted the command `make clean`*
+
+*User accepted the command `clear`*
+
+*User accepted the command `make`*
+
+*Viewed [Aircraft.cpp](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/src/Aircraft.cpp) *
+
+*User accepted the command `./flightsim`*
+
+*User accepted the command `./flight_sim`*
+
+*User accepted the command `git status`*
+
+### Planner Response
+
+Harika bir iş çıkardın! Sayıların arayüzde jet hızıyla güncellenmesini izlemek, bütün o arka plan kodlamalarının (Signals & Slots, Multithreading, UDP) meyvesini verdiği o tatmin edici andır.
+
+Git reposuna yollamadan önce ufak bir uyarı: Qt, projeyi derlerken `build-qt_dashboard-Desktop-Debug/` adında bir klasör oluşturdu ve bunun içinde devasa derlenmiş dosyalar var. Bunları repoya atarsak GitHub'ı çok şişiririz. Bu yüzden önce onu `.gitignore` dosyasına eklemeliyiz.
+
+Terminalini açıp sırasıyla şu komutları yapıştırarak mükemmel bir commit mesajıyla her şeyi yollayabilirsin:
+
+```bash
+echo "build-qt_dashboard*/" >> .gitignore
+git add .
+git commit -m "feat: Initialize Qt Dashboard and integrate UDP telemetry
+
+- Created the complete Flight Control System Architecture documentation.
+- Initialized a Qt-based desktop GUI for real-time telemetry visualization.
+- Developed UdpReceiver to listen on localhost:5005 for incoming UDP flight datagrams.
+- Bound UdpReceiver to MainWindow using Qt Signals & Slots to stream data asynchronously.
+- Updated C++ Physics Engine (Aircraft.cpp) to append currentThrust to the UDP payload format.
+- Mapped altitude, velocity, and thrust to MainWindow UI labels."
+git push
+```
+
+### Sırada Ne Var? (Aşama 10'un Zirvesi)
+
+Roadmap'e göre Aşama 10'un sonuncu ve en havalı maddesindeyiz:
+> *"Gelen İrtifa (Altitude) ve Hız (Velocity) verilerinin arayüzde gerçek zamanlı (real-time) grafiklerle (plot/gauge) çizdirilmesi."*
+
+Şu an sayıları sadece sönük bir "Label" (yazı) olarak görüyoruz. Uçuş simülatörleri yazılarla değil, grafikler ve göstergelerle (hud/gauge) doludur! 
+
+Önümüzdeki adımda uçağın İrtifasını (Altitude) zamana bağlı olarak çizen, akıcı bir **gerçek zamanlı grafik (Real-time Plot)** oluşturacağız. Bunun için Qt dünyasının en meşhur grafik kütüphanesi olan **QCustomPlot**'u veya **QtCharts**'ı projemize entegre edip o etiketleri (Label) canlandıracağız!
+
+Commit işlemini tamamladıktan sonra hazır olduğunda haber ver, grafikleri çizmeye başlayalım! 📈✈️
+
+### User Input
+
+hazırım!
+
+*User accepted the command `clear`*
+
+*User accepted the command `git add .`*
+
+*User accepted the command `
+ziaburi@victus:~/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator$ git commit -m "feat: Initialize Qt Dashboard and integrate UDP telemetry
+- Created the complete Flight Control System Architecture documentation. Structural and behavioral UML diagrams.
+- Initialized a Qt-based desktop GUI for real-time telemetry visualization.
+- Developed UdpReceiver to listen on localhost:5005 for incoming UDP flight datagrams.
+- Bound UdpReceiver to MainWindow using Qt Signals & Slots to stream data asynchronously.
+- Updated C++ Physics Engine (Aircraft.cpp) to append currentThrust to the UDP payload format.
+- Mapped altitude, velocity, and thrust to MainWindow UI labels."`*
+
+*User accepted the command `git push`*
+
+*User accepted the command `clear`*
+
+*Viewed [CMakeLists.txt](file:///home/ziaburi/Documents/RTOS-Based_6-DOF_Aircraft_Flight_Simulator/qt_dashboard/CMakeLists.txt) *
+
+### Planner Response
+
+Mükemmel! Uçuş verilerimiz saniyede 10 kere (10Hz) UDP üzerinden arayüze akıyor. Şimdi bu verilerden **İrtifa (Altitude)** değerini zamana bağlı çizdiren profesyonel bir dinamik grafik yapacağız.
+
+Bunun için Qt'nin kendi **QtCharts** modülünü kullanacağız (CMake dosyanı kontrol ettim, şanslısın ki zaten eklenmiş durumda!).
+
+Bu işlemi adım adım, mantığını kavrayarak koda dökelim:
+
+### Adım 1: Arayüze "Grafik Tahtası" Eklemek
+1. Qt Creator'da `mainwindow.ui` (Design) sekmesini aç.
+2. Sol taraftaki Widget listesinden **`Graphics View`** adlı aracı bul ve pencerenin içine (labellerin yanına veya altına) genişçe sürükle bırak.
+3. Bu araç varsayılan olarak sadece düz resim/şekil göstermeye yarar. Biz bunu "Grafik Görüntüleyici"ye çevireceğiz (Promotion):
+   - Eklediğin Graphics View'e **sağ tıkla** ve **"Promote to..." (Yükselt)** seçeneğine tıkla.
+   - Çıkan pencerede "Promoted class name" (Yükseltilecek Sınıf) kısmına **`QChartView`** yaz. (Büyük/küçük harf önemli).
+   - "Header file" kısmı otomatik olarak `qchartview.h` olacaktır, elleme.
+   - Önce sağdaki **Add**, ardından aşağıdaki **Promote** butonuna bas.
+   - Son olarak sağ alttaki Properties panelinden bu aracın `objectName` özelliğini **`chartView`** olarak değiştir ki koddan ona rahatça ulaşabilelim.
+
+### Adım 2: Çizgi (Series) ve Tablo (Chart) Tanımlamaları
+Grafikler iki yapıdan oluşur: İçine X ve Y koordinatlarını attığımız **Çizgi (QLineSeries)** ve bu çizgiyi üzerinde barındıran **Tablo (QChart)**.
+1. `mainwindow.h` dosyasına git.
+2. En üste şu kütüphaneleri ekle:
+   ```cpp
+   #include <QtCharts/QChartView>
+   #include <QtCharts/QLineSeries>
+   ```
+3. `private:` bölümünün içine, ileride bolca kullanacağımız şu iki değişkeni tanımla:
+   ```cpp
+   QChart *altitudeChart;
+   QLineSeries *altitudeSeries;
+   ```
+
+### Adım 3: Grafiğin Kurulumu (Constructor)
+Şimdi `mainwindow.cpp` dosyasına geç ve MainWindow'un yapıcı fonksiyonunun (`MainWindow::MainWindow`) içine, `ui->setupUi(this);` satırının altına şunları yaz:
+
+```cpp
+// 1. Çizgi nesnemizi (Seri) oluşturuyoruz
+altitudeSeries = new QLineSeries();
+altitudeSeries->setName("Altitude (m)");
+
+// 2. Tablo (Chart) nesnemizi oluşturup içine çizgimizi ekliyoruz
+altitudeChart = new QChart();
+altitudeChart->addSeries(altitudeSeries);
+altitudeChart->createDefaultAxes(); // X ve Y eksenlerini otomatik oluştur
+
+// 3. UI'daki widget'ımıza bu tabloyu çizmesini söylüyoruz
+ui->chartView->setChart(altitudeChart);
+```
+
+Bu 3 adımı koda döküp derlemeyi (Run) dener misin? Başarılı olursan ekranda boş ama hazır bir grafik tablosu göreceksin. Gördüğünde haber ver, son adım olan **"Verileri canlı olarak grafiğe akıtma" (Append)** işlemine geçelim! Eğlence başlıyor. 📈

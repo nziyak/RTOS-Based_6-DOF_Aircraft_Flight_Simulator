@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+
+QT_CHARTS_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,5 +25,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+    QChart *altitudeChart;
+    QLineSeries* altitudeSeries;
 };
 #endif // MAINWINDOW_H
